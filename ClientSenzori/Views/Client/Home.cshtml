@@ -1,0 +1,91 @@
+﻿@model ClientSenzori.Client.ModelView.HomeClientModelView
+@{
+
+    Layout = "~/Views/ClientShared/_Layout.cshtml";
+}
+
+
+<div class="jumbotron">
+    <h2>ALERTS</h2>
+    <p class="lead">Alerts battery too low for x sensor.</p>
+</div>
+<div class="row">
+
+    <div class="row">
+        <div class="row text-left">
+            <div class="col-md-12">
+                <img class="img-responsive" src="@Href(Model.ImagePath)" alt="Client logo" width="200" height="100" style="float:left" />
+            </div>
+        </div>
+    </div>
+    
+
+
+    <div class="col-md-8">
+        <div class=" col-md-8">
+            <h3>@Model.FirstName</h3>
+            <h3>@Model.LastName</h3>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="btn-group-vertical">
+                <a class="btn btn-success" href="">Upload image &raquo;</a>
+                <a class="btn btn-danger" style="position:relative; bottom:0px;" href="">Log out &raquo;</a>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+
+<div class="row">
+    <h2>Sensor Table</h2>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Battery</th>
+                <th>Status</th>
+                <th>CheckInDate</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var key in Model.SenzorInfo.Keys)
+        {
+            using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+            <tr class="btn-danger">
+                <td>@key</td>
+               @foreach (var value in Model.SenzorInfo[key].ToList())
+               {
+
+                <td>@value</td>
+
+               }
+                <td>
+
+
+                   
+                            @Html.TextBoxFor(model => model.SenzorName, new { @Value = @key })
+                            @Html.ValidationMessageFor(model => model.SenzorName, "", new { @class = "text-danger" })
+                        
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Check Senzor" class="btn btn-default" />
+                        </div>
+                    </div>
+
+
+                </td>
+            </tr>
+
+        }
+        }
+        </tbody>
+      
+    </table>
+</div>
+    
+}

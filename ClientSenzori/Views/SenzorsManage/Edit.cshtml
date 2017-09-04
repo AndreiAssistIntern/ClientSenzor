@@ -1,0 +1,101 @@
+﻿<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+@model ClientSenzori.ModelView.AssignedSenzor
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<table class="table">
+    <tr>
+        <th>
+           Email
+        </th>
+        <th>
+            Senzor DropList
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.assignedSenzor.Keys)
+    {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item)
+               
+            </td>
+            <td>
+                <select id="@item" onchange="getValues(" @item ")">
+                    <option value=""></option>
+                    @foreach (var senzors in Model.assignedSenzor[item].ToList())
+                    {
+
+                        <option value="@senzors">@senzors</option>
+                    }
+                </select>
+            </td>
+            <td>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="row">
+                            <div class="col-md-1">
+                                @Html.HiddenFor(model => model.EmailClient, new { id = item + "Email" })
+                                @Html.ValidationMessageFor(model => model.EmailClient, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1">
+                                @Html.HiddenFor(model => model.SenzorName, new { id = item + "Senzor" })
+                                @Html.ValidationMessageFor(model => model.SenzorName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Add senzor" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<script>
+    function getValues(email)
+    {
+        var e = document.getElementById(email);
+        var strUser = e.options[e.selectedIndex].value;
+        alert(strUser);
+    }
+
+    $(document).ready(function(){
+        $('select').change(function(){
+            var emailId = $(this).attr('id');
+            var email=emailId + "Email";
+            var textbox = document.getElementById(email);
+            textbox.value=emailId;
+
+
+            var senzorId= $(this).attr('id');
+            senzorId +="Senzor";
+
+            var textbox1 = document.getElementById(senzorId);
+            textbox1.value=$(this).val();
+        });
+    });
+
+
+
+</script>
